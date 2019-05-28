@@ -2,7 +2,7 @@
  * index.ts
  */
 
-import {getSignature, getSigningKey} from './v4';
+import {getSignature, getSigningKey, getSignedUrl} from './v4';
 
-export {getSignature, getSigningKey};
-export default {getSignature, getSigningKey};
+export {getSignature, getSigningKey, getSignedUrl};
+export default {getSignature, getSigningKey, getSignedUrl};

@@ -31,7 +31,7 @@ interface awsCredentialInfo{
 
 export const getSignedUrl = async (
   {accessKeyId, secretAccessKey, sessionToken, regionName}: awsCredentialInfo,
-  method: String, serviceName: String, uriPath: String, headers: String
+  method: String, host: String, serviceName: String, uriPath: String, headers: Object
 ) => {
   const iso8601 = DateIsoString(new Date());
   const yyyymmdd = iso8601.slice(0,8);
@@ -43,11 +43,14 @@ export const getSignedUrl = async (
   queryString += `&X-Amz-Security-Token=${encodeURIComponent(`${sessionToken}`)}`;
   queryString += '&X-Amz-SignedHeaders=host';
 
+  console.log(`Needs to be included: ${JSON.stringify(headers)}`);
+
   const canonicalReq =
     `${method}\n`
     + `${uriPath}\n`
     + `${queryString}\n`
-    + `${headers}\n\n`
+    //+ `${headers}\n\n`
+    + `host:${host}\n\n`
     + 'host\nUNSIGNED-PAYLOAD';
   const hash = await jschash.compute(jseu.encoder.stringToArrayBuffer(canonicalReq), 'SHA-256');
   console.log(`canonical Request: ${canonicalReq}`);
