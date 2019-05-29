@@ -1,74 +1,186 @@
 import jschash from 'js-crypto-hash';
 import jschmac from 'js-crypto-hmac';
 import jseu from 'js-encoding-utils';
+import {dateIsoString} from './util';
 
-const DateIsoString = (d: Date) => {
-  const pad = (number: number) => {
-    if (number < 10) return `0${number}`;
-    return number;
-  };
+interface awsCredentialInfo{
+  accessKeyId: string,
+  secretAccessKey: string,
+  sessionToken: string,
+  regionName: string
+}
 
-  return `${d.getUTCFullYear()}${pad(d.getUTCMonth() + 1)}${pad(d.getUTCDate())}T`
-    +`${pad(d.getUTCHours())}${pad(d.getUTCMinutes())}${pad(d.getUTCSeconds())}Z`;
+interface httpHeaders { [key: string]: string }
+
+interface awsRequestInfo{
+  method: string,
+  hostName: string,
+  serviceName: string,
+  uriPath: string,
+  headers?: httpHeaders,
+  httpProto?: 'http'|'https',
+  expires?: number
+}
+
+/**
+ * Get signed URL
+ * @param accessKeyId {string}
+ * @param secretAccessKey {string}
+ * @param sessionToken {string}
+ * @param regionName {string}
+ * @param method {string}
+ * @param hostName {string}
+ * @param serviceName {string}
+ * @param uriPath {string}
+ * @param headers {httpHeaders}
+ * @param httpProto {string}
+ * @param expires {number}
+ */
+export const getSignedUrl = async (
+  {accessKeyId, secretAccessKey, sessionToken, regionName}: awsCredentialInfo,
+  {method, hostName, serviceName, uriPath, headers={}, httpProto='https', expires=900}: awsRequestInfo,
+): Promise<string> => {
+
+  const newHeaders = Object.assign({'host': hostName}, headers);
+  const stringifiedHeaders = sortedStringifiedHeaders(newHeaders);
+  const signedHeaders = getSignedHeaders(stringifiedHeaders);
+
+  // get query string
+  const {queryString, iso8601, yyyymmdd}: awsQueryString = getQueryString(accessKeyId, sessionToken, regionName, signedHeaders, serviceName, expires);
+
+  // compose canonical request
+  const {canonicalRequest, additionalQueryString}: awsCanonicalRequest = getCanonicalRequest(method, uriPath, queryString, stringifiedHeaders, signedHeaders);
+
+  // compute hash of canonical request
+  const hash: Uint8Array = await jschash.compute(jseu.encoder.stringToArrayBuffer(canonicalRequest), 'SHA-256');
+
+  // console.log(`canonical Request: ${canonicalRequest}`);
+  // console.log(`hash: ${jseu.encoder.arrayBufferToHexString(hash)}`);
+
+  // compose stringToSign
+  const stringToSign: string = getStringToSign(iso8601, yyyymmdd, regionName, serviceName, hash);
+
+  // derive siningKey
+  const signatureKey = await getSigningKey(secretAccessKey, yyyymmdd, regionName, serviceName);
+
+  // compute hmac
+  const signature = await getSignature(signatureKey, stringToSign);
+  // console.log(`signature: ${jseu.encoder.arrayBufferToHexString(signature)}`);
+
+  return `${httpProto}://${hostName}${uriPath}?${queryString}${additionalQueryString}&X-Amz-Signature=${encodeURIComponent(jseu.encoder.arrayBufferToHexString(signature))}`;
+
 };
 
 /**
- * Sign and generate version 4 signature
- * @param keyBuffer {Uint8Array} - signing key in Uint8Array
- * @param stringToSign {string} - String to be signed.
- * @returns {Promise<{Uint8Array}>} - signature bytes
+ * Stringify and sort http headers
+ * @param headers {httpHeaders}
+ * @returns {Array<string>}
  */
-export const getSignature = async (keyBuffer: Uint8Array, stringToSign: String): Promise<Uint8Array> =>
-  jschmac.compute(keyBuffer, jseu.encoder.stringToArrayBuffer(stringToSign), 'SHA-256');
+const sortedStringifiedHeaders = (headers: httpHeaders): Array<string> => {
+
+  const upper: Array<string> = Object.keys(headers).map( (k) => `${k}:${headers[k]}`);
+  const lower = upper.map( (m) => m.toLowerCase());
+  lower.sort();
+
+  return lower;
+};
+
+/**
+ * Get signed headers
+ * @param stringifiedHeaders {Array<string>}
+ * @returns {string}
+ */
+const getSignedHeaders = (stringifiedHeaders: Array<string>): string => {
+  let signedHeaders = '';
+
+  for(let i = 0; i < stringifiedHeaders.length; i++ ){
+    signedHeaders += stringifiedHeaders[i].split(':')[0];
+    if(i !== stringifiedHeaders.length-1) signedHeaders += ';';
+  }
+
+  return signedHeaders;
+};
 
 
-interface awsCredentialInfo{
-  accessKeyId: String,
-  secretAccessKey: String,
-  sessionToken: String,
-  regionName: String
+
+interface awsQueryString {
+  queryString: string,
+  iso8601: string,
+  yyyymmdd: string
 }
+/**
+ * Get query string
+ * @param accessKeyId {string}
+ * @param sessionToken {string}
+ * @param regionName {string}
+ * @param signedHeaders {string}
+ * @param serviceName {string}
+ * @param expires {number}
+ * @returns {awsQueryString}
+ */
+const getQueryString = (
+  accessKeyId: string, sessionToken: string, regionName: string, signedHeaders: string, serviceName: string, expires: number
+): awsQueryString => {
 
-export const getSignedUrl = async (
-  {accessKeyId, secretAccessKey, sessionToken, regionName}: awsCredentialInfo,
-  method: String, host: String, serviceName: String, uriPath: String, headers: Object
-) => {
-  const iso8601 = DateIsoString(new Date());
+  const iso8601 = dateIsoString(new Date());
   const yyyymmdd = iso8601.slice(0,8);
   let queryString = 'X-Amz-Algorithm=AWS4-HMAC-SHA256';
   queryString += `&X-Amz-Credential=${
     encodeURIComponent(`${accessKeyId}/${yyyymmdd}/${regionName}/${serviceName}/aws4_request`)}`;
   queryString += `&X-Amz-Date=${iso8601}`;
-  queryString += '&X-Amz-Expires=900'; // default 15 mins
+  queryString += `&X-Amz-Expires=${expires}`; // default 15 mins
   queryString += `&X-Amz-Security-Token=${encodeURIComponent(`${sessionToken}`)}`;
-  queryString += '&X-Amz-SignedHeaders=host';
+  queryString += `&X-Amz-SignedHeaders=${encodeURIComponent(signedHeaders)}`;
 
-  console.log(`Needs to be included: ${JSON.stringify(headers)}`);
-
-  const canonicalReq =
-    `${method}\n`
-    + `${uriPath}\n`
-    + `${queryString}\n`
-    //+ `${headers}\n\n`
-    + `host:${host}\n\n`
-    + 'host\nUNSIGNED-PAYLOAD';
-  const hash = await jschash.compute(jseu.encoder.stringToArrayBuffer(canonicalReq), 'SHA-256');
-  console.log(`canonical Request: ${canonicalReq}`);
-  console.log(`hash: ${jseu.encoder.arrayBufferToHexString(hash)}`);
-
-  const stringToSign = getStringToSign(iso8601, yyyymmdd, regionName, serviceName, hash);
-
-  const signatureKey = await getSigningKey(secretAccessKey, yyyymmdd, regionName, serviceName);
-
-  // compute hmac
-  const signature = await getSignature(signatureKey, stringToSign);
-  console.log(`signature: ${jseu.encoder.arrayBufferToHexString(signature)}`);
-
-  return `${uriPath}?${queryString}&X-Amz-Signature=${encodeURIComponent(jseu.encoder.arrayBufferToHexString(signature))}`;
-
+  return {queryString, iso8601, yyyymmdd};
 };
 
-const getStringToSign = (iso8601: String, yyyymmdd: String, regionName: String, serviceName: String, hash: Uint8Array): String =>
+
+interface awsCanonicalRequest{
+  canonicalRequest: string,
+  additionalQueryString: string
+}
+
+/**
+ * Get Canonical request.
+ * @param method {string}
+ * @param uriPath {string}
+ * @param queryString {string}
+ * @param stringifledHeaders {Array<string>}
+ * @param signedHeaders {string}
+ * @param headers {Object}
+ * @returns {string}
+ */
+const getCanonicalRequest = (
+  method: string,
+  uriPath: string,
+  queryString: string,
+  stringifledHeaders: Array<string>,
+  signedHeaders: string
+): awsCanonicalRequest => {
+
+  let canonicalRequest =
+    `${method}\n`
+    + `${uriPath}\n`
+    + `${queryString}\n`;
+
+  for(let i = 0; i < stringifledHeaders.length; i++) canonicalRequest += `${stringifledHeaders[i]}\n`;
+
+  canonicalRequest += `\n${signedHeaders}\nUNSIGNED-PAYLOAD`;
+
+  return {canonicalRequest, additionalQueryString: ''};
+};
+
+/**
+ * Get stringToSign.
+ * @param iso8601 {string}
+ * @param yyyymmdd {string}
+ * @param regionName {string}
+ * @param serviceName {string}
+ * @param hash {string}
+ * @returns {string}
+ */
+const getStringToSign = (iso8601: string, yyyymmdd: string, regionName: string, serviceName: string, hash: Uint8Array): string =>
   `AWS4-HMAC-SHA256
 ${iso8601}
 ${yyyymmdd}/${regionName}/${serviceName}/aws4_request
@@ -83,10 +195,10 @@ ${jseu.encoder.arrayBufferToHexString(hash)}`;
  * @returns {Promise<{Uint8Array}>} - signing key bytes
  */
 export const getSigningKey = async (
-  secretAccessKey: String,
-  dateStamp: String,
-  regionName: String,
-  serviceName: String
+  secretAccessKey: string,
+  dateStamp: string,
+  regionName: string,
+  serviceName: string
 ): Promise<Uint8Array> => {
   try {
     const kDate: Uint8Array = await jschmac.compute(
@@ -110,3 +222,11 @@ export const getSigningKey = async (
   }
 };
 
+/**
+ * Sign and generate version 4 signature
+ * @param keyBuffer {Uint8Array} - signing key in Uint8Array
+ * @param stringToSign {string} - String to be signed.
+ * @returns {Promise<{Uint8Array}>} - signature bytes
+ */
+export const getSignature = async (keyBuffer: Uint8Array, stringToSign: string): Promise<Uint8Array> =>
+  jschmac.compute(keyBuffer, jseu.encoder.stringToArrayBuffer(stringToSign), 'SHA-256');

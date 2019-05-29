@@ -9,6 +9,7 @@ const envName = env.envName;
 import Amplify, {Auth} from 'aws-amplify';
 import {pool_id, client_id, federation_id, user_id, password, region_name, host_name} from './auth-params';
 
+// Get fetch in Node and Browsers
 const getFetch = () => {
   let fetch;
   const global = Function('return this;')();
@@ -23,6 +24,8 @@ const getFetch = () => {
 describe(`${envName}: AWS version 4 signature test`, () => {
   before(async function () {
     this.timeout(50000);
+    const global = Function('return this;')();
+    if(typeof window === 'undefined') global.fetch = require('node-fetch');
 
     Amplify.configure({
       Auth: {
@@ -31,6 +34,7 @@ describe(`${envName}: AWS version 4 signature test`, () => {
         userPoolWebClientId: `${client_id}`,
         identityPoolId: `${federation_id}`,
         mandatorySignIn: true,
+        // authenticationFlowType: 'USER_PASSWORD_AUTH'
       }
     });
 
@@ -39,12 +43,12 @@ describe(`${envName}: AWS version 4 signature test`, () => {
 
 
   it('Signing', async () => {
+    console.log(message);
+
     const currentCredential = await Auth.currentCredentials();
     const uriPath = '/public/test-mine.txt';
-    const headers = {ContentType: 'application/json'}; //
+    const headers = {'Content-Type' : 'application/json', 'X-Amz-Meta-Foo': 'baz', 'X-Amz-Meta-Foobar': 'bazbaz'}; //
     const payload = {message: 'hello world my implementation'};
-
-    console.log(message);
 
     const signedUrlGet = await lib.getSignedUrl(
       {
@@ -53,25 +57,32 @@ describe(`${envName}: AWS version 4 signature test`, () => {
         sessionToken: currentCredential.sessionToken,
         regionName: region_name
       },
-      'GET', host_name, 's3', uriPath, headers
+      {
+        method: 'GET',
+        hostName: host_name,
+        serviceName: 's3',
+        uriPath,
+        headers
+      },
     );
 
-    console.log(`upload through my implementation: https://${host_name+signedUrlGet}`);
-    const signedUrl = `https://${host_name+signedUrlGet}`;
+    console.log(`download through my implementation: ${signedUrlGet}`);
+    const signedUrl = signedUrlGet;
 
 
-    // upload
+    // download
     const fetch = getFetch();
     const responseGet = await fetch(signedUrl, {
       method: 'GET',
-      headers: {'Content-Type' : 'application/json'},
+      headers,
       mode: 'cors'
     }).catch( (e: Error) => console.error(e));
+
     console.log(`Get text to S3: ${responseGet.status}`);
     expect(responseGet.status === 200).to.be.true;
     const body = await responseGet.json();
-    expect(body.toString() === payload.toString()).to.be.true;
-    console.log(body.toString());
+    expect(JSON.stringify(body) === JSON.stringify(payload)).to.be.true;
+    console.log(JSON.stringify(body));
     expect(true).to.be.true;
   });
 });
