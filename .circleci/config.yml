@@ -42,8 +42,8 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       # run tests!
-      - run: yarn test
-      - run: yarn karma
+      #- run: yarn test # TODO aws-sdk for mocha test in Node.js
+      - run: yarn karma # browser test
       - run: yarn add --dev coveralls lcov-result-merger
       - run: ./node_modules/.bin/lcov-result-merger './coverage/*/lcov.info' ./coverage/merged-lcov.info
       - run: cat ./coverage/merged-lcov.info | ./node_modules/.bin/coveralls

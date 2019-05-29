@@ -4,6 +4,10 @@
   "description": "JavaScript implementation of AWS Signature Version 4",
   "main": "dist/index.js",
   "scripts": {
+    "flow:version": "npm version --no-git-tag-version",
+    "release:start": "./node_modules/.bin/can-npm-publish --vorbose && git flow release start v$npm_package_version",
+    "release:finish": "git flow release finish v$npm_package_version",
+    "release:push": "git push --all && git push origin v$npm_package_version",
     "test": "nyc mocha --recursive $(find test -name '*.spec.ts')",
     "test:bundle": "yarn webpack && cross-env TEST_ENV=bundle yarn test",
     "karma": "cross-env TEST_ENV=source ./node_modules/.bin/karma start",
@@ -28,6 +32,7 @@
     "@types/node": "10.14.7",
     "@typescript-eslint/eslint-plugin": "1.9.0",
     "aws-amplify": "1.1.28",
+    "can-npm-publish": "^1.3.1",
     "chai": "4.2.0",
     "cross-env": "5.2.0",
     "eslint": "5.16.0",
