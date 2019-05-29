@@ -1,5 +1,5 @@
 {
-  "name": "js-aws-signature-v4",
+  "name": "js-aws-sigv4",
   "version": "0.1.2",
   "description": "JavaScript implementation of AWS Signature Version 4",
   "main": "dist/index.js",
