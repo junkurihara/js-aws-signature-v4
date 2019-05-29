@@ -26,6 +26,18 @@
   },
   "author": "Jun Kurihara",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/junkurihara/js-aws-signature-v4.git"
+  },
+  "bugs": {
+    "url": "https://github.com/junkurihara/js-aws-signature-v4/issues"
+  },
+  "homepage": "https://github.com/junkurihara/js-aws-signature-v4#readme",
+  "keywords": [
+    "crypto",
+    "aws"
+  ],
   "devDependencies": {
     "@types/chai": "4.1.7",
     "@types/mocha": "5.2.6",
