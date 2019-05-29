@@ -17,5 +17,6 @@ webpack.prod.js
 .nyc_output/
 .nycrc
 renovate.json
-tsconfing.json
+tsconfig.json
 auth*.ts
+typings/
