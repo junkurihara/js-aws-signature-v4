@@ -18,6 +18,7 @@ const webpackConfig = {
     new webpack.DefinePlugin({
       'process.env': {
         TEST_ENV: JSON.stringify(process.env.TEST_ENV),
+        POOL_ID: JSON.stringify(process.env.POOL_ID),
       }
     })
   ],

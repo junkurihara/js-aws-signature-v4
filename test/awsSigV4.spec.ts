@@ -7,7 +7,14 @@ const message = env.message;
 const envName = env.envName;
 
 import Amplify, {Auth} from 'aws-amplify';
-import {pool_id, client_id, federation_id, user_id, password, region_name, host_name} from './auth-params';
+//import {pool_id, client_id, federation_id, user_id, password, region_name, host_name} from './auth-params';
+const pool_id = process.env.POOL_ID;
+const client_id = process.env.CLIENT_ID;
+const federation_id = process.env.FEDERATION_ID;
+const user_id = process.env.USER_ID;
+const password = process.env.PASSWORD;
+const region_name = process.env.REGION_NAME;
+const host_name = process.env.HOST_NAME;
 
 // Get fetch in Node and Browsers
 const getFetch = () => {
@@ -29,7 +36,7 @@ describe(`${envName}: AWS version 4 signature test`, () => {
 
     Amplify.configure({
       Auth: {
-        region: 'ap-northeast-1',
+        region: region_name,
         userPoolId: `${pool_id}`,
         userPoolWebClientId: `${client_id}`,
         identityPoolId: `${federation_id}`,
@@ -84,5 +91,9 @@ describe(`${envName}: AWS version 4 signature test`, () => {
     expect(JSON.stringify(body) === JSON.stringify(payload)).to.be.true;
     console.log(JSON.stringify(body));
     expect(true).to.be.true;
+  });
+
+  it('process.env', () => {
+    console.log(process.env);
   });
 });
