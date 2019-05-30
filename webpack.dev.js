@@ -19,6 +19,12 @@ const webpackConfig = {
       'process.env': {
         TEST_ENV: JSON.stringify(process.env.TEST_ENV),
         POOL_ID: JSON.stringify(process.env.POOL_ID),
+        CLIENT_ID: JSON.stringify(process.env.CLIENT_ID),
+        FEDERATION_ID: JSON.stringify(process.env.FEDERATION_ID),
+        USER_ID: JSON.stringify(process.env.USER_ID),
+        PASSWORD: JSON.stringify(process.env.PASSWORD),
+        REGION_NAME: JSON.stringify(process.env.REGION_NAME),
+        HOST_NAME: JSON.stringify(process.env.HOST_NAME)
       }
     })
   ],
