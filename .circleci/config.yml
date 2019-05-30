@@ -45,8 +45,8 @@ jobs:
       #- run: yarn test # TODO aws-sdk for mocha test in Node.js
       - run: yarn karma # browser test
       - run: yarn add --dev coveralls lcov-result-merger
-      #- run: ./node_modules/.bin/lcov-result-merger './coverage/*/lcov.info' ./coverage/merged-lcov.info TODO
-      #- run: cat ./coverage/merged-lcov.info | ./node_modules/.bin/coveralls
+      #- run: ./node_modules/.bin/lcov-result-merger './coverage/*/lcov.info' ./coverage/merged-lcov.info // TODO
+      #- run: cat ./coverage/merged-lcov.info | ./node_modules/.bin/coveralls // TODO
       - run: cat ./coverage/lcov.info | ./node_modules/.bin/coveralls
 
       - store_artifacts:

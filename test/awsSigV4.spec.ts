@@ -7,14 +7,8 @@ const message = env.message;
 const envName = env.envName;
 
 import Amplify, {Auth} from 'aws-amplify';
-//import {pool_id, client_id, federation_id, user_id, password, region_name, host_name} from './auth-params';
-const pool_id: string = (process.env.POOL_ID) ? process.env.POOL_ID : '';
-const client_id: string = (process.env.CLIENT_ID) ? process.env.CLIENT_ID : '';
-const federation_id: string = (process.env.FEDERATION_ID)? process.env.FEDERATION_ID : '';
-const user_id: string = (process.env.USER_ID) ? process.env.USER_ID: '';
-const password: string = (process.env.PASSWORD) ? process.env.PASSWORD: '';
-const region_name: string = (process.env.REGION_NAME) ? process.env.REGION_NAME: '';
-const host_name: string = (process.env.HOST_NAME) ? process.env.HOST_NAME: '';
+
+import {pool_id, client_id, federation_id, user_id, password, region_name, host_name} from './params';
 
 // Get fetch in Node and Browsers
 const getFetch = () => {
@@ -31,6 +25,9 @@ const getFetch = () => {
 describe(`${envName}: AWS version 4 signature test`, () => {
   before(async function () {
     this.timeout(50000);
+
+    // TODO: Using AWS SDK for testing in Node.js
+    //  amplify doesn't work well in Node.js, sessionToken can't be retrieved.
     const global = Function('return this;')();
     if(typeof window === 'undefined') global.fetch = require('node-fetch');
 
@@ -93,7 +90,4 @@ describe(`${envName}: AWS version 4 signature test`, () => {
     expect(true).to.be.true;
   });
 
-  it('process.env', () => {
-    console.log(process.env);
-  });
 });
