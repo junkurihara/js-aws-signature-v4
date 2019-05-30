@@ -5,7 +5,7 @@
 const common = require('../webpack.common.js');
 
 
-export function getTestEnv(){
+export const getTestEnv = () => {
   let envName;
   let message;
   let library;
@@ -33,4 +33,18 @@ export function getTestEnv(){
   }
 
   return {library, envName, message};
-}
+};
+
+
+
+// Get fetch in Node and Browsers
+export const getFetch = () => {
+  let fetch;
+  const global = Function('return this;')();
+  if (typeof window === 'undefined'){
+    fetch = require('node-fetch');
+    global.fetch = fetch;
+  }
+  else fetch = window.fetch;
+  return fetch;
+};
