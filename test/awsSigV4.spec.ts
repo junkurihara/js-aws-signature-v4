@@ -1,64 +1,39 @@
 import chai from 'chai';
 const expect = chai.expect;
-import {getTestEnv} from './prepare';
+import {getTestEnv, getFetch} from './prepare';
+import {getCredential} from './aws-credential';
+
 const env = getTestEnv();
+const fetch = getFetch();
 const lib = env.library;
 const message = env.message;
 const envName = env.envName;
 
-import Amplify, {Auth} from 'aws-amplify';
-
 import {pool_id, client_id, federation_id, user_id, password, region_name, host_name} from './params';
 
-// Get fetch in Node and Browsers
-const getFetch = () => {
-  let fetch;
-  const global = Function('return this;')();
-  if (typeof window === 'undefined'){
-    fetch = require('node-fetch');
-    global.fetch = fetch;
-  }
-  else fetch = window.fetch;
-  return fetch;
-};
-
 describe(`${envName}: AWS version 4 signature test`, () => {
+  let credential: AWS.Credentials;
   before(async function () {
+    console.log(message);
     this.timeout(50000);
 
-    // TODO: Using AWS SDK for testing in Node.js
-    //  amplify doesn't work well in Node.js, sessionToken can't be retrieved.
-    const global = Function('return this;')();
-    if(typeof window === 'undefined') global.fetch = require('node-fetch');
-
-    Amplify.configure({
-      Auth: {
-        region: region_name,
-        userPoolId: `${pool_id}`,
-        userPoolWebClientId: `${client_id}`,
-        identityPoolId: `${federation_id}`,
-        mandatorySignIn: true,
-        // authenticationFlowType: 'USER_PASSWORD_AUTH'
-      }
-    });
-
-    await Auth.signIn(user_id, password).catch((e: Error) => console.error(e));
+    credential = await getCredential(user_id, password, pool_id, client_id, region_name, federation_id);
   });
 
 
-  it('Signing', async () => {
+  it('AWS Signed URL with session token', async () => {
     console.log(message);
 
-    const currentCredential = await Auth.currentCredentials();
+    await credential.getPromise();
     const uriPath = '/public/test-mine.txt';
     const headers = {'Content-Type' : 'application/json', 'X-Amz-Meta-Foo': 'baz', 'X-Amz-Meta-Foobar': 'bazbaz'}; //
     const payload = {message: 'hello world my implementation'};
 
     const signedUrlGet = await lib.getSignedUrl(
       {
-        accessKeyId: currentCredential.accessKeyId,
-        secretAccessKey: currentCredential.secretAccessKey,
-        sessionToken: currentCredential.sessionToken,
+        accessKeyId: credential.accessKeyId,
+        secretAccessKey: credential.secretAccessKey,
+        sessionToken: credential.sessionToken,
         regionName: region_name
       },
       {
@@ -73,9 +48,7 @@ describe(`${envName}: AWS version 4 signature test`, () => {
     console.log(`download through my implementation: ${signedUrlGet}`);
     const signedUrl = signedUrlGet;
 
-
     // download
-    const fetch = getFetch();
     const responseGet = await fetch(signedUrl, {
       method: 'GET',
       headers,

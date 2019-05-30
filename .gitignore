@@ -9,3 +9,7 @@ yarn-error.log
 .nyc_output/
 dist/
 auth-params.ts
+test/html/*.js
+test/html/*.html
+yarn.lock
+
