@@ -1,7 +1,9 @@
-import jschash from 'js-crypto-hash';
-import jschmac from 'js-crypto-hmac';
 import jseu from 'js-encoding-utils';
 import {dateIsoString} from './util';
+import {getJscHmac, getJscHash} from './env';
+
+const jschmac = getJscHmac();
+const jschash = getJscHash();
 
 interface awsCredentialInfo{
   accessKeyId: string,
