@@ -1,6 +1,6 @@
 {
   "name": "js-aws-sigv4",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "JavaScript implementation of AWS Signature Version 4",
   "main": "dist/index.js",
   "scripts": {
@@ -73,8 +73,8 @@
     "webpack-merge": "4.2.1"
   },
   "dependencies": {
-    "js-crypto-hash": "0.4.2",
-    "js-crypto-hmac": "0.4.3",
+    "js-crypto-hash": "0.4.3",
+    "js-crypto-hmac": "0.4.4",
     "js-encoding-utils": "0.5.1"
   }
 }
