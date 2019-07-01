@@ -56,9 +56,6 @@ export const getSignedUrl = async (
   // compute hash of canonical request
   const hash: Uint8Array = await jschash.compute(jseu.encoder.stringToArrayBuffer(canonicalRequest), 'SHA-256');
 
-  // console.log(`canonical Request: ${canonicalRequest}`);
-  // console.log(`hash: ${jseu.encoder.arrayBufferToHexString(hash)}`);
-
   // compose stringToSign
   const stringToSign: string = getStringToSign(iso8601, yyyymmdd, regionName, serviceName, hash);
 
@@ -67,7 +64,6 @@ export const getSignedUrl = async (
 
   // compute hmac
   const signature = await getSignature(signatureKey, stringToSign);
-  // console.log(`signature: ${jseu.encoder.arrayBufferToHexString(signature)}`);
 
   return `${httpProto}://${hostName}${uriPath}?${queryString}${additionalQueryString}&X-Amz-Signature=${encodeURIComponent(jseu.encoder.arrayBufferToHexString(signature))}`;
 
