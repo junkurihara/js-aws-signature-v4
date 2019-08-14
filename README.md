@@ -5,7 +5,7 @@ TypeScript implementation of AWS Signature Version 4
 [![CircleCI](https://circleci.com/gh/junkurihara/js-aws-signature-v4.svg?style=svg)](https://circleci.com/gh/junkurihara/js-aws-signature-v4)
 [![Dependencies](https://david-dm.org/junkurihara/js-aws-signature-v4.svg)](https://david-dm.org/junkurihara/js-aws-signature-v4)
 [![Maintainability](https://api.codeclimate.com/v1/badges/84061cc18473d527bbf6/maintainability)](https://codeclimate.com/github/junkurihara/js-aws-signature-v4/maintainability)
-[![Coverage Status](https://coveralls.io/repos/github/junkurihara/js-aws-signature-v4/badge.svg?branch=develop)](https://coveralls.io/github/junkurihara/js-aws-signature-v4?branch=develop)
+[![codecov](https://codecov.io/gh/junkurihara/js-aws-signature-v4/branch/develop/graph/badge.svg)](https://codecov.io/gh/junkurihara/js-aws-signature-v4)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
