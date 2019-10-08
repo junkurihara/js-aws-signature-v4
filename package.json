@@ -42,7 +42,7 @@
     "@types/aws-sdk": "2.7.0",
     "@types/chai": "4.2.3",
     "@types/mocha": "5.2.7",
-    "@types/node": "10.14.20",
+    "@types/node": "10.14.21",
     "@typescript-eslint/eslint-plugin": "2.3.3",
     "amazon-cognito-identity-js": "3.0.15",
     "aws-sdk": "2.544.0",
