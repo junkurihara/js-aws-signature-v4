@@ -5,6 +5,6 @@
   "require": [ "ts-node/register" ],
   "report-dir": "./coverage/nyc",
   "extension": [ ".ts", ".tsx" ],
-  "sourceMap": true,
+  "sourceMap": false,
   "all": true
 }
