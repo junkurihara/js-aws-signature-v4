@@ -46,8 +46,8 @@ jobs:
       # run tests!
       - run: yarn test
       - run: yarn karma # browser test
-      - run: yarn add --dev lcov-result-merger
-      - run: ./node_modules/.bin/lcov-result-merger './coverage/*/lcov.info' ./coverage/merged-lcov.info
+      - run: sudo apt install lcov
+      - run: find ./coverage  -name lcov.info -exec echo -a {} \; | xargs lcov -o ./coverage/merged-lcov.info
       - codecov/upload:
           file: ./coverage/merged-lcov.info
 

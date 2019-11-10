@@ -12,8 +12,7 @@
     "@typescript-eslint"
   ],
   "parserOptions": {
-    "sourceType": "module",
-    "project": "./tsconfig.json"
+    "sourceType": "module"
   },
   "rules": {
     "indent": [
