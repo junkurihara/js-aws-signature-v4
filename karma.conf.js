@@ -28,7 +28,6 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       `./dist/${common.bundleName}`,
-      //'./node_modules/js-crypto-utils/dist/jscu.bundle.min.js',
       './test/**/*.spec.ts'
     ],
 
@@ -42,7 +41,7 @@ module.exports = function(config) {
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
       './src/**/*.ts': [],
-      './test/**/*.spec.ts': ['webpack']
+      './test/**/*.spec.ts': ['webpack', 'sourcemap']
     },
 
     webpack: getWebpackConfig(),
