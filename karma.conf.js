@@ -28,7 +28,8 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       `./dist/${common.bundleName}`,
-      './test/**/*.spec.ts'
+      './test/**/*.spec.ts',
+      './node_modules/js-crypto-utils/dist/jscu.bundle.min.js'
     ],
 
 
