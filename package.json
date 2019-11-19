@@ -75,7 +75,7 @@
     "webpack-merge": "4.2.2"
   },
   "dependencies": {
-    "js-crypto-hash": "0.6.0",
+    "js-crypto-hash": "0.6.1",
     "js-crypto-hmac": "0.6.0",
     "js-encoding-utils": "0.5.6"
   }
