@@ -5,16 +5,16 @@ import {getJscHmac, getJscHash} from './env';
 const jschmac = getJscHmac();
 const jschash = getJscHash();
 
-interface awsCredentialInfo{
+type awsCredentialInfo = {
   accessKeyId: string,
   secretAccessKey: string,
   sessionToken: string,
   regionName: string
 }
 
-interface httpHeaders { [key: string]: string }
+type httpHeaders = { [key: string]: string }
 
-interface awsRequestInfo{
+type awsRequestInfo = {
   method: string,
   hostName: string,
   serviceName: string,
