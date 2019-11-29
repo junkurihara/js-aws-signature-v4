@@ -38,7 +38,9 @@ const webpackConfig = {
     ]
   },
   externals: { // for random just in playground
-    'crypto': true
+    'crypto': true,
+    'js-crypto-hmac': true,
+    'js-crypto-hash': true
   },
   node: {
     fs: 'empty'
