@@ -40,7 +40,7 @@
   ],
   "devDependencies": {
     "@types/aws-sdk": "2.7.0",
-    "@types/chai": "4.2.5",
+    "@types/chai": "4.2.6",
     "@types/mocha": "5.2.7",
     "@types/node": "10.17.6",
     "@typescript-eslint/eslint-plugin": "2.10.0",
