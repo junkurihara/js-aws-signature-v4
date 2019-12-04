@@ -1,19 +1,11 @@
-export const getJscHmac = () => {
-  let module;
+export const getJscHmac = () => getModule('js-crypto-hmac');
+
+export const getJscHash = () => getModule('js-crypto-hash');
+
+
+const getModule = (name: 'js-crypto-hash'|'js-crypto-hmac') => {
   if(typeof window !== 'undefined' && typeof (<any>window).jscu !== 'undefined'){
-    module = (<any>window).jscu.hmac;
+    return (name === 'js-crypto-hash') ? (<any>window).jscu.hash: (<any>window).jscu.hmac;
   }
-  else module = require('js-crypto-hmac');
-
-  return module;
-};
-
-export const getJscHash = () => {
-  let module;
-  if(typeof window !== 'undefined' && typeof (<any>window).jscu !== 'undefined'){
-    module = (<any>window).jscu.hash;
-  }
-  else module = require('js-crypto-hash');
-
-  return module;
+  else return (name === 'js-crypto-hash') ? require('js-crypto-hash'): require('js-crypto-hmac');
 };
