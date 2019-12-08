@@ -42,7 +42,7 @@
     "@types/aws-sdk": "2.7.0",
     "@types/chai": "4.2.6",
     "@types/mocha": "5.2.7",
-    "@types/node": "10.17.6",
+    "@types/node": "12.12.14",
     "@typescript-eslint/eslint-plugin": "2.10.0",
     "@typescript-eslint/parser": "2.10.0",
     "amazon-cognito-identity-js": "3.2.0",
@@ -52,7 +52,7 @@
     "cross-env": "6.0.3",
     "eslint": "6.7.2",
     "istanbul-instrumenter-loader": "3.0.1",
-    "js-crypto-utils": "0.18.1",
+    "js-crypto-utils": "0.18.2",
     "jsdom": "15.2.1",
     "karma": "4.4.1",
     "karma-chrome-launcher": "3.1.0",
@@ -75,8 +75,8 @@
     "webpack-merge": "4.2.2"
   },
   "dependencies": {
-    "js-crypto-hash": "0.6.1",
-    "js-crypto-hmac": "0.6.1",
+    "js-crypto-hash": "0.6.2",
+    "js-crypto-hmac": "0.6.2",
     "js-encoding-utils": "0.5.6"
   }
 }
