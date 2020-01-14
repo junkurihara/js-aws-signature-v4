@@ -77,7 +77,7 @@
   },
   "dependencies": {
     "js-crypto-hash": "0.6.3",
-    "js-crypto-hmac": "0.6.2",
+    "js-crypto-hmac": "0.6.3",
     "js-encoding-utils": "0.5.6"
   }
 }
