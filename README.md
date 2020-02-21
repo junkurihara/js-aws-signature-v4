@@ -11,6 +11,8 @@ TypeScript implementation of AWS Signature Version 4
 
 > **WARNING**: At this time this solution should be considered suitable for research and experimentation, further code and security review is needed before utilization in a production application.
 
+>**WARNING**: Due to operational mistakes at the test environment host, NO TEST AT ACTUAL AWS ENVIRONMENT IS EXECUTED UNTIL IT GET FIXED.
+
 # Introduction and Overview
 This tiny library is being developed to generate AWS signature version 4 and pre-signed url. This library is designed to be 'universal', i.e., it works both on most browsers and on Node.js just by importing from npm/source code.
 
