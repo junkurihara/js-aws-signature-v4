@@ -65,10 +65,6 @@ describe(`${envName}: AWS version 4 signature test`, () => {
   });
 
 
-  /*
-  // Temporary comment out due to operational mistakes at the environment host.
-  // WARNING: UNTIL IT GET FIXED, NO TEST AT ACTUAL AWS ENVIRONMENT IS EXECUTED.
-
   it('AWS Signed URL with session token, check if the S3 upload and download work', async () => {
 
     const uriPath = '/public/test-mine.txt';
@@ -145,6 +141,5 @@ describe(`${envName}: AWS version 4 signature test`, () => {
     const body = await responseGet.json();
     expect(JSON.stringify(body) === JSON.stringify(payload)).to.be.true;
   });
-   */
 
 });
