@@ -4,6 +4,7 @@ import {getTestEnv, getFetch} from './prepare';
 import {getCredential} from './aws-credential';
 
 const env = getTestEnv();
+// @ts-ignore
 const fetch = getFetch();
 const lib = env.library;
 const message = env.message;
