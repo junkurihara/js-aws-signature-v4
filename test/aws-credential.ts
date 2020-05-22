@@ -32,9 +32,9 @@ export const getCredential = (
         IdentityPoolId: federation_id, // your identity pool id here
         Logins: loginsInfo
       });
-      (< AWS.CognitoIdentityCredentials > AWS.config.credentials).refresh((error: Error) => {
-        if (error) {
-          reject(error.message);
+      (< AWS.CognitoIdentityCredentials > AWS.config.credentials).refresh((err?: AWS.AWSError|undefined) => {
+        if (err) {
+          reject(err.message);
         } else {
           // Instantiate aws sdk service objects now that the credentials have been updated.
           // example: var s3 = new AWS.S3();
