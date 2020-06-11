@@ -61,7 +61,7 @@
     "karma-mocha-reporter": "2.2.5",
     "karma-sourcemap-loader": "0.3.7",
     "karma-webpack": "4.0.2",
-    "mocha": "7.2.0",
+    "mocha": "8.0.1",
     "mocha-sinon": "2.1.2",
     "node-fetch": "2.6.0",
     "nyc": "15.1.0",
