@@ -51,7 +51,7 @@
     "cross-env": "7.0.2",
     "eslint": "7.10.0",
     "istanbul-instrumenter-loader": "3.0.1",
-    "js-crypto-utils": "0.18.3",
+    "js-crypto-utils": "1.0.0",
     "jsdom": "16.4.0",
     "karma": "5.2.3",
     "karma-chrome-launcher": "3.1.0",
@@ -75,8 +75,8 @@
     "webpack-merge": "5.1.4"
   },
   "dependencies": {
-    "js-crypto-hash": "0.6.3",
-    "js-crypto-hmac": "0.6.3",
+    "js-crypto-hash": "1.0.0",
+    "js-crypto-hmac": "1.0.0",
     "js-encoding-utils": "0.5.6"
   }
 }
