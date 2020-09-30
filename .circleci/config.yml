@@ -7,7 +7,7 @@ defaults: &defaults
   working_directory: ~/repo
   docker:
     # specify the version you desire here
-    - image: circleci/node:latest-browsers
+    - image: circleci/node:lts-browsers
 
     # Specify service dependencies here if necessary
     # CircleCI maintains a library of pre-built images
@@ -15,7 +15,7 @@ defaults: &defaults
     # - image: circleci/mongo:3.4.4
 
 orbs:
-  codecov: codecov/codecov@1.0.5
+  codecov: codecov/codecov@1.1.1
 
 jobs:
   test:
