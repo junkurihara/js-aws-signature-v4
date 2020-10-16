@@ -41,7 +41,7 @@ module.exports = (config) => {
     karmaTypescriptConfig: {
       bundlerOptions: {
         constants: {
-          'process.env': (typeof process.env.TEST_ENV !== 'undefined') ? {
+          'process.env': {
             TEST_ENV: process.env.TEST_ENV,
             POOL_ID: process.env.POOL_ID,
             CLIENT_ID: process.env.CLIENT_ID,
@@ -50,7 +50,7 @@ module.exports = (config) => {
             PASSWORD: process.env.PASSWORD,
             REGION_NAME: process.env.REGION_NAME,
             HOST_NAME: process.env.HOST_NAME
-          } : {},
+          },
         }
       },
       coverageOptions:{
