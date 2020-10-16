@@ -9,4 +9,5 @@ yarn-error.log
 .nyc_output/
 dist/
 auth-params.ts
+.env
 yarn.lock
