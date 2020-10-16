@@ -8,5 +8,4 @@ const password = (process.env.PASSWORD) ? process.env.PASSWORD: '';
 const region_name = (process.env.REGION_NAME) ? process.env.REGION_NAME: '';
 const host_name = (process.env.HOST_NAME) ? process.env.HOST_NAME: '';
 
-console.log(pool_id, client_id, federation_id, user_id, password, region_name, host_name);
 export {pool_id, client_id, federation_id, user_id, password, region_name, host_name};
