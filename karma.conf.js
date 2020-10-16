@@ -1,19 +1,7 @@
 // Karma configuration
-// Generated on Wed Jun 13 2018 13:09:34 GMT+0900 (JST)
-const common = require('./webpack.common.js');
-const webpackConfig = require('./webpack.dev.js');
-// const babelExtraPlugins = ['babel-plugin-istanbul'];
-const getWebpackConfig = () => {
-  const config = webpackConfig(null, {mode: 'development'});
-  delete config.entry;
-  delete config.output;
+// Generated on Tue Oct 13 2020 22:00:08 GMT+0900 (Japan Standard Time)
 
-  return config;
-};
-const path = require('path');
-
-
-module.exports = function(config) {
+module.exports = (config) => {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
@@ -22,14 +10,15 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha'],
+    frameworks: ['jasmine', 'karma-typescript'],
 
 
     // list of files / patterns to load in the browser
     files: [
       'node_modules/js-crypto-utils/dist/jscu.bundle.min.js',
-      `./dist/${common.bundleName}`,
-      './test/**/*.spec.ts',
+      { pattern: 'dist/**/*.bundle.js'},
+      { pattern: 'src/**/*.ts' },
+      { pattern: 'test/**/*.ts' },
     ],
 
 
@@ -41,30 +30,46 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      './src/**/*.ts': [],
-      './test/**/*.spec.ts': ['webpack', 'sourcemap']
+      '**/*.ts': ['karma-typescript']
     },
 
-    webpack: getWebpackConfig(),
-
-    webpackMiddleware: {
-      // webpack-dev-middleware configuration
-      // i. e.
-      stats: 'errors-only',
-    },
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['coverage-istanbul'],
-    coverageIstanbulReporter: {
-      reports: [ 'lcov', 'text-summary' ],
-      dir: path.join(__dirname, 'coverage/karma'),
-      fixWebpackSourcePaths: true,
-      'report-config': {
-        html: { outdir: 'html' }
-      }
+    reporters: ['progress', 'karma-typescript'],
+    karmaTypescriptConfig: {
+      bundlerOptions: {
+        constants: {
+          'process.env': (typeof process.env.TEST_ENV !== 'undefined') ? {
+            TEST_ENV: process.env.TEST_ENV,
+            POOL_ID: process.env.POOL_ID,
+            CLIENT_ID: process.env.CLIENT_ID,
+            FEDERATION_ID: process.env.FEDERATION_ID,
+            USER_ID: process.env.USER_ID,
+            PASSWORD: process.env.PASSWORD,
+            REGION_NAME: process.env.REGION_NAME,
+            HOST_NAME: process.env.HOST_NAME
+          } : {},
+        }
+      },
+      coverageOptions:{
+        exclude: /(test\/.*|\.(d|spec|test)\.ts)/i,
+      },
+      reports:
+        {
+          'html': {
+            directory: 'coverage',
+            subdirectory: 'karma/html'
+          },
+          'text':'',
+          'lcovonly': {
+            directory: 'coverage',
+            subdirectory: 'karma'
+          },
+        }
     },
+
 
     // web server port
     port: 9876,
@@ -80,13 +85,12 @@ module.exports = function(config) {
 
 
     // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: true,
+    // autoWatch: true,
 
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
     // browsers: ['ChromeHeadless'],
-    // browsers: ['Chrome'],
     browsers: ['Chrome-headless'],
     customLaunchers: {
       'Chrome-headless': {
@@ -94,7 +98,6 @@ module.exports = function(config) {
         flags: ['--headless', '--remote-debugging-port=9222', '--no-sandbox']
       }
     },
-
 
 
     // Continuous Integration mode
@@ -106,4 +109,3 @@ module.exports = function(config) {
     concurrency: Infinity
   });
 };
-

@@ -6,11 +6,7 @@ thumbs.db
 yarn-error.log
 .idea/
 .vscode/
-.coverage/
 .nyc_output/
 dist/
 auth-params.ts
-test/html/*.js
-test/html/*.html
 yarn.lock
-

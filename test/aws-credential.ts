@@ -1,4 +1,4 @@
-import AWS from 'aws-sdk';
+import * as AWS from 'aws-sdk';
 import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js';
 
 // Work around... for the problem that global.crypto is not defined in Node.js env.
