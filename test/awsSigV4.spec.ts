@@ -1,5 +1,3 @@
-import chai from 'chai';
-const expect = chai.expect;
 import {getTestEnv, getFetch} from './prepare';
 import {getCredential} from './aws-credential';
 
@@ -15,10 +13,8 @@ import {dateIsoString} from '../src/util';
 
 describe(`${envName}: AWS version 4 signature test`, () => {
   let credential: AWS.Credentials;
-  before(async function () {
+  beforeAll(async function () {
     console.log(message);
-    this.timeout(50000);
-
     credential = await getCredential(user_id, password, pool_id, client_id, region_name, federation_id);
   });
 
@@ -31,14 +27,16 @@ describe(`${envName}: AWS version 4 signature test`, () => {
       region_name,
       's3'
     );
-    expect(signingKey).to.be.a.instanceof(Uint8Array);
+    expect(signingKey).toBeInstanceOf(Uint8Array);
 
     const signature = await lib.getSignature(
       signingKey,
       'stringToSign'
     );
-    expect(signature).to.be.a.instanceof(Uint8Array);
-  });
+    expect(signature).toBeInstanceOf(Uint8Array);
+  },
+  50000
+  );
 
 
   it('AWS Signed URL without session token', async () => {
@@ -61,8 +59,10 @@ describe(`${envName}: AWS version 4 signature test`, () => {
       },
     );
     //console.log(signedUrlGet);
-    expect(signedUrlGet).to.be.string;
-  });
+    expect(typeof signedUrlGet === 'string').toBeTruthy();
+  },
+  50000
+  );
 
 
   it('AWS Signed URL with session token, check if the S3 upload and download work', async () => {
@@ -103,7 +103,7 @@ describe(`${envName}: AWS version 4 signature test`, () => {
       throw new Error(e.message);
     });
 
-    expect(responsePut.status === 200).to.be.true;
+    expect(responsePut.status === 200).toBeTruthy();
 
 
     ////////////////////////////////////////////////////////////////////////////////////////
@@ -136,10 +136,12 @@ describe(`${envName}: AWS version 4 signature test`, () => {
       throw new Error(e.message);
     });
 
-    expect(responseGet.status === 200).to.be.true;
+    expect(responseGet.status === 200).toBeTruthy();
 
     const body = await responseGet.json();
-    expect(JSON.stringify(body) === JSON.stringify(payload)).to.be.true;
-  });
+    expect(JSON.stringify(body) === JSON.stringify(payload)).toBeTruthy();
+  },
+  50000
+  );
 
 });
