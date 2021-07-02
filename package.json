@@ -43,7 +43,7 @@
     "can-npm-publish": "1.3.5",
     "cross-env": "7.0.3",
     "dotenv": "10.0.0",
-    "eslint": "7.29.0",
+    "eslint": "7.30.0",
     "jasmine-core": "3.8.0",
     "jest": "27.0.6",
     "js-crypto-utils": "1.0.2",
