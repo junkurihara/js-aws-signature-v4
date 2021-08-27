@@ -215,8 +215,13 @@ export const getSigningKey = async (
 
     return jschmac.compute(
       kService, jseu.encoder.stringToArrayBuffer('aws4_request'), 'SHA-256');
-  } catch (e) {
-    throw new Error(`Failed to generate signature key: ${e.message}`);
+  } catch (e: unknown) {
+    if (e instanceof Error) {
+      throw new Error(`Failed to generate signature key: ${e.message}`);
+    }
+    else {
+      throw new Error('Failed to generate signature key');
+    }
   }
 };
 
