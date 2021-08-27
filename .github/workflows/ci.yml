@@ -24,6 +24,15 @@ jobs:
       matrix:
         node-version: [ 14.x, 16.x ]
 
+    env:
+      USER_ID: ${{ secrets.USER_ID }}
+      PASSWORD: ${{ secrets.PASSWORD }}
+      POOL_ID: ${{ secrets.POOL_ID }}
+      FEDERATION_ID: ${{ secrets.FEDERATION_ID }}
+      CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      REGION_NAME: ${{ secrets.REGION_NAME }}
+      HOST_NAME: ${{ secrets.HOST_NAME }}
+
     steps:
       - uses: actions/checkout@v2
 
