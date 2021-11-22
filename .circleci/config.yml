@@ -96,6 +96,7 @@ workflows:
     - publish:
         context:
           - docker-hub-cred
+          - npm
         requires:
           - test
         filters:
