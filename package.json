@@ -45,7 +45,7 @@
     "dotenv": "10.0.0",
     "eslint": "8.6.0",
     "jasmine-core": "4.0.0",
-    "jest": "27.4.5",
+    "jest": "27.4.6",
     "js-crypto-utils": "1.0.3",
     "karma": "6.3.9",
     "karma-chrome-launcher": "3.1.0",
