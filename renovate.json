@@ -16,5 +16,10 @@
   "patch": {
     "automerge": true
   },
-  "labels": ["update-dependencies"]
+  "labels": ["update-dependencies"],
+  "packageRules": [
+    {
+      "excludePackageNames": ["colors"]
+    }
+  ]
 }
