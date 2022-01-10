@@ -63,7 +63,7 @@
     "js-encoding-utils": "0.7.1"
   },
   "resolutions": {
-    "colors": "1.4.0"
+    "colors": "1.4.2"
   },
   "overrides": {
     "colors@1": "1.4.0"
