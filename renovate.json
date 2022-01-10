@@ -17,9 +17,5 @@
     "automerge": true
   },
   "labels": ["update-dependencies"],
-  "packageRules": [
-    {
-      "excludePackageNames": ["colors"]
-    }
-  ]
+  "ignoreDeps": ["colors"]
 }
