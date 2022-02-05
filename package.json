@@ -47,7 +47,7 @@
     "jasmine-core": "4.0.0",
     "jest": "27.4.7",
     "js-crypto-utils": "1.0.4",
-    "karma": "6.3.13",
+    "karma": "6.3.15",
     "karma-chrome-launcher": "3.1.0",
     "karma-jasmine": "4.0.1",
     "karma-typescript": "5.5.3",
