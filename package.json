@@ -44,7 +44,7 @@
     "cross-env": "7.0.3",
     "dotenv": "16.0.0",
     "eslint": "8.15.0",
-    "jasmine-core": "4.1.0",
+    "jasmine-core": "4.1.1",
     "jest": "28.1.0",
     "js-crypto-utils": "1.0.4",
     "karma": "6.3.19",
