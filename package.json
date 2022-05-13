@@ -49,7 +49,7 @@
     "js-crypto-utils": "1.0.4",
     "karma": "6.3.20",
     "karma-chrome-launcher": "3.1.1",
-    "karma-jasmine": "5.0.0",
+    "karma-jasmine": "5.0.1",
     "karma-typescript": "5.5.3",
     "ts-jest": "28.0.2",
     "ts-loader": "9.3.0",
