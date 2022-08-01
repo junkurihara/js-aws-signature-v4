@@ -39,7 +39,7 @@
     "@typescript-eslint/eslint-plugin": "5.31.0",
     "@typescript-eslint/parser": "5.31.0",
     "amazon-cognito-identity-js": "5.2.10",
-    "aws-sdk": "2.1185.0",
+    "aws-sdk": "2.1186.0",
     "can-npm-publish": "1.3.6",
     "cross-env": "7.0.3",
     "dotenv": "16.0.1",
