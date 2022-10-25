@@ -22,7 +22,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [ 18.x, 19.x ]
+        node-version: [ 18.x ]
 
     env:
       USER_ID: ${{ secrets.USER_ID }}
