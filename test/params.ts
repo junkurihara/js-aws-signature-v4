@@ -1,4 +1,4 @@
-require('dotenv').config();
+// require('dotenv').config();
 
 const pool_id = (process.env.POOL_ID) ? process.env.POOL_ID : '';
 const client_id = (process.env.CLIENT_ID) ? process.env.CLIENT_ID : '';
