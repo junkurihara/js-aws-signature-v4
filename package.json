@@ -1,6 +1,6 @@
 {
   "name": "js-aws-sigv4",
-  "version": "0.2.20",
+  "version": "0.2.21",
   "description": "JavaScript implementation of AWS Signature Version 4",
   "main": "dist/index.js",
   "scripts": {
