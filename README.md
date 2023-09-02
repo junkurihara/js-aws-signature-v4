@@ -1,12 +1,12 @@
 # js-aws-signature-v4
 TypeScript implementation of AWS Signature Version 4
 
+
 [![npm version](https://badge.fury.io/js/js-aws-sigv4.svg)](https://badge.fury.io/js/js-aws-sigv4)
-[![CircleCI](https://circleci.com/gh/junkurihara/js-aws-signature-v4.svg?style=svg)](https://circleci.com/gh/junkurihara/js-aws-signature-v4)
 [![Maintainability](https://api.codeclimate.com/v1/badges/84061cc18473d527bbf6/maintainability)](https://codeclimate.com/github/junkurihara/js-aws-signature-v4/maintainability)
 [![codecov](https://codecov.io/gh/junkurihara/js-aws-signature-v4/branch/develop/graph/badge.svg)](https://codecov.io/gh/junkurihara/js-aws-signature-v4)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
+![Unit Test](https://github.com/junkurihara/js-aws-signature-v4/actions/workflows/ci.yml/badge.svg)
 
 > **WARNING**: At this time this solution should be considered suitable for research and experimentation, further code and security review is needed before utilization in a production application.
 
