@@ -1,6 +1,6 @@
 // Karma configuration
 // Generated on Tue Oct 13 2020 22:00:08 GMT+0900 (Japan Standard Time)
-require('dotenv').config(); // trick to preload .env in Karma env.
+// require('dotenv').config(); // trick to preload .env in Karma env.
 
 module.exports = (config) => {
   config.set({
