@@ -6,9 +6,9 @@ name: test
 on:
   # Triggers the workflow on push or pull request events but only for the develop branch
   push:
-    branches: [ develop ]
+    branches: [develop]
   pull_request:
-    branches: [ develop ]
+    branches: [develop]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -22,7 +22,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [ 18.x, 20.x ]
+        node-version: [18.x, 20.x]
 
     env:
       USER_ID: ${{ secrets.USER_ID }}
@@ -64,19 +64,12 @@ jobs:
       - name: Test with karma
         run: yarn karma
 
-#      - name: Install lcov
-#        run: sudo apt install lcov
-#    # Steps represent a sequence of tasks that will be executed as part of the job
-#    steps:
-#      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-#      - uses: actions/checkout@v2
-#
-#      # Runs a single command using the runners shell
-#      - name: Run a one-line script
-#        run: echo Hello, world!
-#
-#      # Runs a set of commands using the runners shell
-#      - name: Run a multi-line script
-#        run: |
-#          echo Add other actions to build,
-#          echo test, and deploy your project.
+      - name: Install lcov and merge coverage info
+        run: |
+          sudo apt install lcov
+          find ./coverage  -name lcov.info -exec echo -a {} \; | xargs lcov -o ./coverage/merged-lcov.info
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage/merged-lcov.info
