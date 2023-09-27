@@ -58,7 +58,7 @@
   },
   "dependencies": {
     "js-crypto-hash": "1.0.7",
-    "js-crypto-hmac": "1.0.6",
+    "js-crypto-hmac": "1.0.7",
     "js-encoding-utils": "0.7.3"
   },
   "resolutions": {
