@@ -57,7 +57,7 @@
     "webpack-cli": "5.1.4"
   },
   "dependencies": {
-    "js-crypto-hash": "1.0.6",
+    "js-crypto-hash": "1.0.7",
     "js-crypto-hmac": "1.0.6",
     "js-encoding-utils": "0.7.3"
   },
