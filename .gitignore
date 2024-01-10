@@ -11,3 +11,4 @@ dist/
 auth-params.ts
 .env
 yarn.lock
+pnpm-lock.yaml

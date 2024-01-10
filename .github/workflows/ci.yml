@@ -60,11 +60,11 @@ jobs:
           npm i -g npm@latest yarn@latest
           yarn install
 
-      - name: Test with jest
+      - name: Test with jest node
         run: yarn test
 
-      - name: Test with karma
-        run: yarn karma
+      - name: Test with jest web
+        run: yarn jest:web
 
       - name: Install lcov and merge coverage info
         run: |
