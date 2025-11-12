@@ -33,7 +33,7 @@
   ],
   "devDependencies": {
     "@types/jest": "30.0.0",
-    "@types/node": "24.10.0",
+    "@types/node": "24.10.1",
     "@typescript-eslint/eslint-plugin": "8.46.4",
     "@typescript-eslint/parser": "8.46.4",
     "amazon-cognito-identity-js": "6.3.16",
