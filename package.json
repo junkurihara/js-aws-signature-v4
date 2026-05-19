@@ -44,7 +44,7 @@
     "jasmine-core": "6.2.0",
     "jest": "30.4.2",
     "js-crypto-utils": "1.0.7",
-    "ts-jest": "29.4.9",
+    "ts-jest": "29.4.10",
     "ts-loader": "9.5.7",
     "typescript": "6.0.3",
     "webpack": "5.106.2",
