@@ -24,7 +24,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [24.x]
+        node-version: [22.x]
 
     env:
       USER_ID: ${{ secrets.USER_ID }}
