@@ -5,6 +5,24 @@ allowBuilds:
   aws-sdk: false
   unrs-resolver: false
 
+minimumReleaseAgeExclude:
+  - '@aws-sdk/core@3.975.2'
+  - '@aws-sdk/credential-provider-cognito-identity@3.972.57'
+  - '@aws-sdk/credential-provider-env@3.972.58'
+  - '@aws-sdk/credential-provider-http@3.972.60'
+  - '@aws-sdk/credential-provider-ini@3.973.2'
+  - '@aws-sdk/credential-provider-login@3.972.64'
+  - '@aws-sdk/credential-provider-node@3.972.68'
+  - '@aws-sdk/credential-provider-process@3.972.58'
+  - '@aws-sdk/credential-provider-sso@3.973.2'
+  - '@aws-sdk/credential-provider-web-identity@3.972.64'
+  - '@aws-sdk/credential-providers@3.1087.0'
+  - '@aws-sdk/nested-clients@3.997.32'
+  - '@aws-sdk/signature-v4-multi-region@3.996.40'
+  - '@aws-sdk/token-providers@3.1087.0'
+  - '@aws-sdk/types@3.974.1'
+  - '@aws-sdk/xml-builder@3.972.35'
+
 # Pin colors@1 to 1.4.0 as a supply-chain safeguard (the colors 1.4.x
 # sabotage incident). Migrated from the former yarn "resolutions" field.
 overrides:

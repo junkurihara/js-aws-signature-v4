@@ -1,13 +1,6 @@
-import * as AWS from 'aws-sdk';
-
-// Work around... for the problem that global.crypto is not defined in Node.js env.
-// This maybe due to the upgrade fo core-js
-if (typeof window === 'undefined') {
-  // @ts-ignore
-  global.crypto = require('crypto');
-}
-
-const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
+import {fromCognitoIdentityPool} from '@aws-sdk/credential-providers';
+import type {AwsCredentialIdentity} from '@aws-sdk/types';
+import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js';
 
 export const getCredential = (
   user_id: string,
@@ -16,7 +9,7 @@ export const getCredential = (
   client_id: string,
   region_name: string,
   federation_id: string
-): Promise<AWS.Credentials> => new Promise( (resolve, reject) => {
+): Promise<AwsCredentialIdentity> => new Promise( (resolve, reject) => {
   const authenticationData = {Username: user_id, Password: password};
   const authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails(authenticationData);
   const poolData = {UserPoolId: pool_id, ClientId: client_id};
@@ -24,23 +17,18 @@ export const getCredential = (
   const userData = {Username: user_id, Pool: userPool};
   const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
   cognitoUser.authenticateUser(authenticationDetails, {
-    onSuccess(result: any) {
-      //POTENTIAL: Region needs to be set if not already set previously elsewhere.
-      AWS.config.region = region_name;
+    onSuccess(result: AmazonCognitoIdentity.CognitoUserSession) {
       const loginsInfo: { [key: string]: string } = {};
       loginsInfo[`cognito-idp.${region_name}.amazonaws.com/${pool_id}`] = result.getIdToken().getJwtToken();
-      AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-        IdentityPoolId: federation_id, // your identity pool id here
-        Logins: loginsInfo
+      // Exchange the user pool ID token for temporary AWS credentials
+      // through the Cognito identity pool (successor of AWS.CognitoIdentityCredentials).
+      const provider = fromCognitoIdentityPool({
+        identityPoolId: federation_id, // your identity pool id here
+        logins: loginsInfo,
+        clientConfig: {region: region_name}
       });
-      (< AWS.CognitoIdentityCredentials > AWS.config.credentials).refresh((err?: AWS.AWSError|undefined) => {
-        if (err) {
-          reject(err.message);
-        } else {
-          // Instantiate aws sdk service objects now that the credentials have been updated.
-          // example: var s3 = new AWS.S3();
-          resolve(<AWS.Credentials> AWS.config.credentials);
-        }
+      provider().then(resolve).catch((err: Error) => {
+        reject(err.message);
       });
     },
 

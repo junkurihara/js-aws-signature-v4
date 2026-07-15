@@ -63,11 +63,14 @@ jobs:
       - name: Install packages
         run: pnpm install --no-frozen-lockfile
 
-      - name: Test with jest node
+      - name: Type check
+        run: pnpm typecheck
+
+      - name: Test with vitest (node)
         run: pnpm test
 
-      - name: Test with jest web
-        run: pnpm jest:web
+      - name: Test with vitest (web)
+        run: pnpm test:web
 
       - name: Install lcov and merge coverage info
         run: |

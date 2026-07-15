@@ -2,7 +2,8 @@
  * prepare.ts
  */
 
-const base = require('../webpack.baseconfig');
+import * as srcLibrary from '../src/index';
+import base from '../lib.baseconfig';
 
 
 export const getTestEnv = () => {
@@ -20,7 +21,7 @@ export const getTestEnv = () => {
   }
   else {
     envName = 'Source';
-    library = require('../src/index');
+    library = srcLibrary;
     message = '**This is a test with source codes in src.**';
   }
 
@@ -29,14 +30,5 @@ export const getTestEnv = () => {
 
 
 
-// Get fetch in Node and Browsers
-export const getFetch = () => {
-  let fetch;
-  const global = Function('return this;')();
-  if (typeof window === 'undefined'){
-    fetch = require('node-fetch');
-    global.fetch = fetch;
-  }
-  else fetch = window.fetch;
-  return fetch;
-};
+// Get fetch in Node (built-in since Node.js 18) and browsers
+export const getFetch = () => globalThis.fetch;

@@ -1,8 +1,9 @@
+import {describe, it, expect, beforeAll} from 'vitest';
+import type {AwsCredentialIdentity} from '@aws-sdk/types';
 import {getTestEnv, getFetch} from './prepare';
 import {getCredential} from './aws-credential';
 
 const env = getTestEnv();
-// @ts-ignore
 const fetch = getFetch();
 const lib = env.library;
 const message = env.message;
@@ -12,7 +13,7 @@ import {pool_id, client_id, federation_id, user_id, password, region_name, host_
 import {dateIsoString} from '../src/util';
 
 describe(`${envName}: AWS version 4 signature test`, () => {
-  let credential: AWS.Credentials;
+  let credential: AwsCredentialIdentity;
   beforeAll(async function () {
     console.log(message);
     credential = await getCredential(user_id, password, pool_id, client_id, region_name, federation_id);
@@ -22,7 +23,6 @@ describe(`${envName}: AWS version 4 signature test`, () => {
 
 
   it('AWS Signing key and signature version 4', async () => {
-    await credential.getPromise();
     const signingKey = await lib.getSigningKey(
       credential.secretAccessKey,
       dateIsoString(new Date()),
@@ -42,7 +42,6 @@ describe(`${envName}: AWS version 4 signature test`, () => {
 
 
   it('AWS Signed URL without session token', async () => {
-    await credential.getPromise();
     const uriPath = '/public/test-mine.txt';
     const headers = {'Content-Type' : 'application/json', 'X-Amz-Meta-Foo': 'baz', 'X-Amz-Meta-Foobar': 'bazbaz'}; //
 
@@ -75,7 +74,6 @@ describe(`${envName}: AWS version 4 signature test`, () => {
 
 
     ////////////////////////////////////////////////////////////////////////////////////////
-    await credential.getPromise();
     const signedUrlPut = await lib.getSignedUrl(
       {
         accessKeyId: credential.accessKeyId,
@@ -109,7 +107,6 @@ describe(`${envName}: AWS version 4 signature test`, () => {
 
 
     ////////////////////////////////////////////////////////////////////////////////////////
-    await credential.getPromise();
     const signedUrlGet = await lib.getSignedUrl(
       {
         accessKeyId: credential.accessKeyId,
