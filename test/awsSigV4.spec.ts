@@ -16,7 +16,9 @@ describe(`${envName}: AWS version 4 signature test`, () => {
   beforeAll(async function () {
     console.log(message);
     credential = await getCredential(user_id, password, pool_id, client_id, region_name, federation_id);
-  });
+  },
+  50000
+  );
 
 
   it('AWS Signing key and signature version 4', async () => {

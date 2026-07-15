@@ -24,7 +24,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [22.x]
+        node-version: [24.x, 26.x]
 
     env:
       USER_ID: ${{ secrets.USER_ID }}
@@ -38,33 +38,36 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
+      - name: Get pnpm store directory
+        id: pnpm-store-path
+        run: echo "dir=$(pnpm store path --silent)" >> $GITHUB_OUTPUT
 
       - uses: actions/cache@v6
-        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        id: pnpm-cache # use this to check for `cache-hit` (`steps.pnpm-cache.outputs.cache-hit != 'true'`)
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          path: ${{ steps.pnpm-store-path.outputs.dir }}
+          # pnpm-lock.yaml is intentionally not committed, so key the cache
+          # on package.json instead of a lockfile hash.
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/package.json') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            ${{ runner.os }}-pnpm-
 
-      - name: Update npm and install packages
-        run: |
-          npm i -g npm@latest yarn@latest
-          yarn install
+      - name: Install packages
+        run: pnpm install --no-frozen-lockfile
 
       - name: Test with jest node
-        run: yarn test
+        run: pnpm test
 
       - name: Test with jest web
-        run: yarn jest:web
+        run: pnpm jest:web
 
       - name: Install lcov and merge coverage info
         run: |
@@ -82,6 +85,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
       # Setup .npmrc file to publish to npm
       - uses: actions/setup-node@v6
         with:
@@ -89,8 +94,8 @@ jobs:
           registry-url: "https://registry.npmjs.org"
           # Defaults to the user or organization that owns the workflow file
           scope: "@octocat"
-      - run: yarn
-      - run: yarn build
+      - run: pnpm install --no-frozen-lockfile
+      - run: pnpm build
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

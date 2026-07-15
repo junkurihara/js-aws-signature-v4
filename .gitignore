@@ -8,7 +8,10 @@ yarn-error.log
 .vscode/
 .nyc_output/
 dist/
+tsconfig.tsbuildinfo
 auth-params.ts
 .env
 yarn.lock
 pnpm-lock.yaml
+.tmp
+.claude

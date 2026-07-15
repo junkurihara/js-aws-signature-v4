@@ -17,11 +17,12 @@ This tiny library is being developed to generate AWS signature version 4 and pre
 # Installation
 At your project directory, do either one of the following.
 
-- From npm/yarn:
+- From npm/yarn/pnpm:
 
   ```shell
   $ npm install --save js-aws-sigv4 // npm
   $ yarn add js-aws-sigv4 // yarn
+  $ pnpm add js-aws-sigv4 // pnpm
   ```
 
 - From GitHub:
