@@ -1,0 +1,11 @@
+# Build scripts of dependencies are disallowed by default (pnpm v11).
+# Neither aws-sdk nor unrs-resolver requires its install scripts for
+# type-checking, building, or running the jest test suites.
+allowBuilds:
+  aws-sdk: false
+  unrs-resolver: false
+
+# Pin colors@1 to 1.4.0 as a supply-chain safeguard (the colors 1.4.x
+# sabotage incident). Migrated from the former yarn "resolutions" field.
+overrides:
+  colors@1: 1.4.0
