@@ -18,7 +18,7 @@
     "cleanup": "rm -rf ./dist coverage ./node_modules"
   },
   "author": "Jun Kurihara",
-  "packageManager": "pnpm@11.13.0",
+  "packageManager": "pnpm@11.13.1",
   "license": "MIT",
   "repository": {
     "type": "git",
