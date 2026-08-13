@@ -33,7 +33,7 @@
     "aws"
   ],
   "devDependencies": {
-    "@aws-sdk/credential-providers": "3.1109.0",
+    "@aws-sdk/credential-providers": "3.1110.0",
     "@aws-sdk/types": "3.974.3",
     "@types/node": "26.2.0",
     "@typescript-eslint/eslint-plugin": "8.67.0",
