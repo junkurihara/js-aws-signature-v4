@@ -35,7 +35,7 @@
   "devDependencies": {
     "@aws-sdk/credential-providers": "3.1123.0",
     "@aws-sdk/types": "3.974.5",
-    "@types/node": "26.4.0",
+    "@types/node": "26.4.1",
     "@typescript-eslint/eslint-plugin": "8.69.0",
     "@typescript-eslint/parser": "8.69.0",
     "@vitest/coverage-v8": "4.1.11",
