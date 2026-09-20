@@ -1,0 +1,91 @@
+# Keeps the pnpm version pinned in the "packageManager" field of package.json
+# up to date. Dependabot's npm ecosystem only parses dependencies,
+# devDependencies and optionalDependencies, so that field is not covered by
+# dependabot.yml. This workflow fills the gap by opening a pull request in the
+# same style as the Dependabot ones (title prefix, label, assignee).
+#
+# Pull requests created with the default GITHUB_TOKEN do not trigger other
+# workflows, so CI will not run on them. To get CI on these pull requests,
+# add a fine-grained PAT with "contents: write" and "pull-requests: write"
+# as the repository secret PNPM_UPDATE_TOKEN; it is picked up automatically.
+
+name: Update pnpm
+
+on:
+  schedule:
+    # 09:00 JST daily, matching the Dependabot schedule.
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-pnpm:
+    runs-on: ubuntu-latest
+    if: github.repository == 'junkurihara/js-aws-signature-v4'
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          token: ${{ secrets.PNPM_UPDATE_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: Compare pinned and latest pnpm versions
+        id: versions
+        run: |
+          current="$(node -p "require('./package.json').packageManager.split('@')[1]")"
+          latest="$(npm view pnpm version)"
+          echo "pinned: ${current}, latest: ${latest}"
+          # Only move forward: skip when already current or when the "latest"
+          # dist-tag points at an older release than the pinned one.
+          if [ "${current}" != "${latest}" ] && \
+             [ "$(printf '%s\n%s\n' "${current}" "${latest}" | sort -V | tail -n 1)" = "${latest}" ]; then
+            update_needed=true
+          else
+            update_needed=false
+          fi
+          {
+            echo "current=${current}"
+            echo "latest=${latest}"
+            echo "update_needed=${update_needed}"
+            echo "branch=update-pnpm/${latest}"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Check for an existing pull request
+        id: existing
+        if: steps.versions.outputs.update_needed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.PNPM_UPDATE_TOKEN || secrets.GITHUB_TOKEN }}
+          BRANCH: ${{ steps.versions.outputs.branch }}
+        run: |
+          # A closed pull request for the same version means it was rejected
+          # on purpose, so it is not recreated either.
+          count="$(gh pr list --head "${BRANCH}" --state all --json number --jq 'length')"
+          echo "count=${count}" >> "$GITHUB_OUTPUT"
+
+      - name: Open pull request
+        if: steps.versions.outputs.update_needed == 'true' && steps.existing.outputs.count == '0'
+        env:
+          GH_TOKEN: ${{ secrets.PNPM_UPDATE_TOKEN || secrets.GITHUB_TOKEN }}
+          CURRENT: ${{ steps.versions.outputs.current }}
+          LATEST: ${{ steps.versions.outputs.latest }}
+          BRANCH: ${{ steps.versions.outputs.branch }}
+          BASE: ${{ github.ref_name }}
+        run: |
+          sed -i -E "s#\"packageManager\": \"pnpm@[0-9.]+\"#\"packageManager\": \"pnpm@${LATEST}\"#" package.json
+          if git diff --quiet -- package.json; then
+            echo "package.json was not modified; the packageManager field may have an unexpected format" >&2
+            exit 1
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "${BRANCH}"
+          git commit -am "chore(deps): update pnpm to v${LATEST}"
+          git push origin "${BRANCH}"
+          gh pr create \
+            --base "${BASE}" \
+            --head "${BRANCH}" \
+            --title "chore(deps): update pnpm to v${LATEST}" \
+            --body "Updates the \`packageManager\` field in package.json from \`pnpm@${CURRENT}\` to \`pnpm@${LATEST}\`." \
+            --label "update-dependencies" \
+            --assignee "junkurihara"
