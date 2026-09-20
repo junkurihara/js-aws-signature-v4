@@ -1,0 +1,47 @@
+# Dependabot configuration (replaces the former renovate.json).
+# Reference: https://docs.github.com/code-security/dependabot/working-with-dependabot/dependabot-options-reference
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Asia/Tokyo"
+    # Every dependency in package.json is pinned to an exact version and
+    # pnpm-lock.yaml is intentionally not committed, so bump the pinned
+    # version itself instead of only touching a lockfile.
+    versioning-strategy: "increase"
+    open-pull-requests-limit: 10
+    assignees:
+      - "junkurihara"
+    labels:
+      - "update-dependencies"
+    commit-message:
+      prefix: "chore(deps)"
+    # Keep monorepo packages together in one pull request, mirroring the
+    # monorepo grouping Renovate applied by default.
+    groups:
+      aws-sdk:
+        patterns:
+          - "@aws-sdk/*"
+      typescript-eslint:
+        patterns:
+          - "@typescript-eslint/*"
+      vitest:
+        patterns:
+          - "vitest"
+          - "@vitest/*"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Asia/Tokyo"
+    assignees:
+      - "junkurihara"
+    labels:
+      - "update-dependencies"
+    commit-message:
+      prefix: "chore(deps)"
