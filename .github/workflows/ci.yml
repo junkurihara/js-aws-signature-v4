@@ -38,13 +38,28 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v6
-
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node-version }}
+
+      - name: Resolve pnpm version from package.json
+        id: pnpm-version
+        # pnpm is listed in devDependencies so that Dependabot keeps it up to
+        # date. Read that version here to keep CI in sync with package.json.
+        run: |
+          set -euo pipefail
+          PNPM_VERSION=$(node -p "require('./package.json').devDependencies.pnpm")
+          if [ -z "${PNPM_VERSION}" ] || [ "${PNPM_VERSION}" = "undefined" ]; then
+            echo "pnpm version is not defined in package.json devDependencies" >&2
+            exit 1
+          fi
+          echo "version=${PNPM_VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: ${{ steps.pnpm-version.outputs.version }}
 
       - name: Get pnpm store directory
         id: pnpm-store-path
@@ -88,8 +103,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - name: Install pnpm
-        uses: pnpm/action-setup@v6
       # Setup .npmrc file to publish to npm
       - uses: actions/setup-node@v7
         with:
@@ -97,6 +110,22 @@ jobs:
           registry-url: "https://registry.npmjs.org"
           # Defaults to the user or organization that owns the workflow file
           scope: "@octocat"
+      - name: Resolve pnpm version from package.json
+        id: pnpm-version
+        # pnpm is listed in devDependencies so that Dependabot keeps it up to
+        # date. Read that version here to keep CI in sync with package.json.
+        run: |
+          set -euo pipefail
+          PNPM_VERSION=$(node -p "require('./package.json').devDependencies.pnpm")
+          if [ -z "${PNPM_VERSION}" ] || [ "${PNPM_VERSION}" = "undefined" ]; then
+            echo "pnpm version is not defined in package.json devDependencies" >&2
+            exit 1
+          fi
+          echo "version=${PNPM_VERSION}" >> "$GITHUB_OUTPUT"
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: ${{ steps.pnpm-version.outputs.version }}
       - run: pnpm install --no-frozen-lockfile
       - run: pnpm build
       - run: npm publish

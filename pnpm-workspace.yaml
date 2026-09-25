@@ -3,6 +3,9 @@
 # type-checking, building, or running the jest test suites.
 allowBuilds:
   aws-sdk: false
+  # pnpm is a devDependency only so that Dependabot tracks its version; CI
+  # installs pnpm via pnpm/action-setup, so its install script is not needed.
+  pnpm: false
   unrs-resolver: false
 
 minimumReleaseAgeExclude:
