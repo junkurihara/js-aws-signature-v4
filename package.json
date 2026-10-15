@@ -38,7 +38,7 @@
     "@typescript-eslint/eslint-plugin": "8.71.1",
     "@typescript-eslint/parser": "8.71.1",
     "@vitest/coverage-v8": "5.0.3",
-    "amazon-cognito-identity-js": "6.3.20",
+    "amazon-cognito-identity-js": "6.3.21",
     "can-npm-publish": "1.3.6",
     "eslint": "10.12.0",
     "pnpm": "12.10.1",
