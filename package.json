@@ -43,7 +43,7 @@
     "eslint": "10.13.0",
     "pnpm": "12.15.0",
     "typescript": "7.0.2",
-    "vite": "8.3.4",
+    "vite": "8.3.5",
     "vitest": "5.0.5"
   },
   "dependencies": {
